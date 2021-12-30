@@ -9,7 +9,7 @@ const port=process.env.PORT||5000;
 app.use(cors())
 app.use(express.json())
 
-const uri = `mongodb+srv://petcare:cITFHOuZ2SSon3lE@cluster0.rh3cx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rh3cx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.get('/',(req,res)=>{
@@ -23,7 +23,7 @@ async function run(){
     const database=client.db("petcare");
     const  productCollection=database.collection('products');
     const  doctorCollection=database.collection('doctors');
-    const  bookappointmentCollection=database.collection('bookappointment');
+    const  bookappointmentCollection=database.collection('bookings');
   //Post Api
 
   app.post('/products',async(req,res)=>{
@@ -78,11 +78,11 @@ app.get('/doctors',async(req,res)=>{
 
 
 
-app.post('/bookappointment',async(req,res)=>{
-  const bookappointment=req.body
-  console.log("hit the post api",bookappointment)
+app.post('/bookings',async(req,res)=>{
+  const bookings=req.body
+  console.log("hit the post api",bookings)
 
-  const result=await bookappointmentCollection.insertOne(bookappointment)
+  const result=await bookappointmentCollection.insertOne(bookings)
   console.log(result)
   res.json(result)
 
